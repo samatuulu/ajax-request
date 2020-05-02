@@ -16,11 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from webapp.views import index, likePost
+from webapp.views import contact_page, post_contact
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index, name='index'),
-    path('like/', likePost, name='likepost')
+    path('', contact_page),
+    path('ajax/contact', post_contact, name='contact_submit')
 ]
 

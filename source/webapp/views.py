@@ -1,19 +1,16 @@
-from django.http import HttpResponse
 from django.shortcuts import render
+from django.http import JsonResponse
+from .forms import ContactForm
 
-from webapp.models import Post, Like
+
+def contact_page(request):
+    form = ContactForm
+    return render(request, 'webapp/core/contact.html', {'contactForm': form})
 
 
-def index(request):
-    posts = Post.objects.all()
-    return render(request, 'webapp/core/post.html', {'posts': posts})
-
-def likePost(request):
-    if request.method == 'GET':
-        post_id = request.GET['post_id']
-        likedPost = Post.objects.get(pk=post_id)
-        m = Like(post=likedPost)
-        m.save()
-        return HttpResponse("Success!")
-    else:
-        return HttpResponse("Request method is not GET")
+def post_contact(request):
+    if request.method == 'POST' and request.is_ajax():
+        form = ContactForm(request.POST)
+        form.save()
+        return JsonResponse({"success": True}, status=200)
+    return JsonResponse({"success":False}, status=400)
